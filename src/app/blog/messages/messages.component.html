@@ -1,0 +1,10 @@
+<h1>{{messages.length}} messages</h1>
+<div *ngIf="messages.length > 0">
+  <myblog-message
+    (removeMessageHandler)="removeMessage(message)"
+    *ngFor="let message of messages"
+    [message]="message"
+  >
+  </myblog-message>
+</div>
+
