@@ -6,6 +6,7 @@ import { appRoutes } from './routerConfig';
 import { BlogModule } from './blog/blog.module';
 import { AppComponent } from './app.component';
 import { AboutMeComponent } from './about-me/about-me.component';
+// import {LazyModule} from './lazy/lazy.module';
 
 @NgModule({
   declarations: [
@@ -16,8 +17,10 @@ import { AboutMeComponent } from './about-me/about-me.component';
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     BlogModule
+    // LazyModule
   ],
   providers: [],
+  // exports: [AppComponent]
   bootstrap: [AppComponent]
 })
 export class AppModule { }

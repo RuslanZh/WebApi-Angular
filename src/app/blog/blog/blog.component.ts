@@ -7,16 +7,16 @@ import { Message } from '../models/message';
   styleUrls: ['./blog.component.css']
 })
 export class BlogComponent implements OnInit {
-    // public messages: object[] = [
-    //   {
-    //     text: 'Message one',
-    //     author: 'Ruslan'
-    //   },
-    //   {
-    //     text: 'Message two',
-    //     author: 'Ruslan'
-    //   }
-    // ];
+    public messages: object[] = [
+      {
+        text: 'Message one',
+        author: 'Ruslan'
+      },
+      {
+        text: 'Message two',
+        author: 'Ruslan'
+      }
+    ];
 
   constructor() {
     // private http: HttpClient

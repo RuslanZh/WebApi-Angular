@@ -17,6 +17,6 @@ import { HttpModule } from '@angular/http';
     HttpModule
   ],
   declarations: [BlogComponent, MessageComponent, MessagesComponent, NewMessageComponent],
-  exports: [BlogComponent],
+  exports: [BlogComponent]
 })
 export class BlogModule { }

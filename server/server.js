@@ -1,10 +1,10 @@
 // server.js
 
-var express = require('express'),
-    bodyParser = require('body-parser'),
-    cors = require('cors'),
-    mongoose = require('mongoose'),
-    config = require('./db');
+var express = require('express');
+var bodyParser = require('body-parser');
+    // cors = require('cors'),
+    // mongoose = require('mongoose'),
+    // config = require('./db');
 var path = require('path');
 
 const app = express();
