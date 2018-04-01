@@ -8,46 +8,22 @@ import 'rxjs/add/operator/share';
 
 @Injectable()
 export class MessageRepositoryService {
-
-  constructor(private http: Http) { }
-  // messages: Message[] = [
-  //   new Message({
-  //     id: 1,
-  //     title: 'Title1',
-  //     text: 'Text1',
-  //     author: 'Author1'
-  //   }),
-  //   new Message({
-  //     id: 2,
-  //     title: 'Title2',
-  //     text: 'Text2',
-  //     author: 'Author2'
-  //   }),
-  //   new Message({
-  //     id: 3,
-  //     title: 'Title3',
-  //     text: 'Text3',
-  //     author: 'Author3'
-  //   }),
-  //   new Message({
-  //     id: 4,
-  //     title: 'Title4',
-  //     text: 'Text4',
-  //     author: 'Author4'
-  //   }),
-  //   new Message({
-  //     id: 5,
-  //     title: 'Title5',
-  //     text: 'Text5',
-  //     author: 'Author5'
-  //   })
-  // ];
+  private readonly apiPath: string;
+  constructor(private http: Http) {
+    this.apiPath = 'http://localhost:4201';
+  }
 
   getAllMessage(): Observable<List<Message>> {
-    return this.http.get(`https://conduit.productionready.io/api/profiles/eric`)
+    return this.http.get(`${this.apiPath}/messages`)
       .map((res: Response) => {
-        const messages = (<Object[]>res.json()).map((message: any) =>
-          new Message({...message}));
+        const response = res.json();
+        if (!response.status) {
+          return List([]);
+        }
+
+        const messages = (<Object[]>response.data).map((message: any) => {
+          return new Message({...message});
+        });
 
         return List(messages);
       })
@@ -55,34 +31,58 @@ export class MessageRepositoryService {
   }
 
   getMessageById(messageId: number): Observable<Message> {
-    return this.http.get(`https://conduit.productionready.io/api/profiles/eric=${messageId}`).map((res: Response) => {
-      return new Message({...<Object>res.json()});
+    return this.http.get(`${this.apiPath}/messages/${messageId}`).map((res: Response) => {
+      const response = res.json();
+      if (!response.status) {
+        return null;
+      }
+
+      return new Message({...response.data});
     }).share();
   }
 
-  addMessage(newMessage: Message): Observable<void> {
+  addMessage(newMessage: Message): Observable<Message> {
     if (!newMessage.title) {
       return;
     }
 
-    return this.http.post(`https://conduit.productionready.io/api/profiles/eric`, newMessage)
-              .map((res: Response) => {})
+    return this.http.post(`${this.apiPath}/messages`, newMessage)
+              .map((res: Response) => {
+                const response = res.json();
+                if (!response.status) {
+                  return null;
+                }
+
+                return new Message({...response.data});
+              })
               .share();
   }
 
-  updateMessage(updatedMessage: Message): Observable<void> {
+  updateMessage(updatedMessage: Message): Observable<Message> {
     if (!updatedMessage.id || !updatedMessage.title) {
       return;
     }
 
-    return this.http.put(`https://conduit.productionready.io/api/profiles/eric=${updatedMessage.id}`, updatedMessage)
-      .map((res: Response) => {})
+    return this.http.put(`${this.apiPath}/messages/${updatedMessage.id}`, updatedMessage)
+      .map((res: Response) => {
+        const response = res.json();
+        if (!response.status) {
+          return null;
+        }
+
+        return new Message({...response.data});
+      })
       .share();
   }
 
   deleteMessageById(messageId: number): Observable<void> {
-    return this.http.delete(`https://conduit.productionready.io/api/profiles/eric=${messageId}`)
-      .map((res: Response) => {})
+    return this.http.delete(`${this.apiPath}/messages/${messageId}`)
+      .map((res: Response) => {
+        const response = res.json();
+        if (!response.status) {
+          return null;
+        }
+      })
       .share();
   }
 }

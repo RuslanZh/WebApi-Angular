@@ -3,45 +3,58 @@ import { Message } from './models/message';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { List } from 'immutable';
-import { Http, Response } from '@angular/http';
+import 'rxjs/add/observable/empty';
 import { MessageRepositoryService } from './message-repository.service';
+// test
+import { Http, Response } from '@angular/http';
 
 @Injectable()
 export class BlogService {
   private _messages: BehaviorSubject<List<Message>> = new BehaviorSubject(List([]));
-  public readonly messages: Observable<List<Message>> = this._messages.asObservable();
+  public readonly messages: Observable<List<Message>> = this._messages.asObservable().share();
+  // get messages(): Observable<List<Message>> {
+  //   return this._messages.asObservable();
+  // }
 
   constructor(private messageRepositoryService: MessageRepositoryService) {
-    messageRepositoryService.getAllMessage()
-      .subscribe((messages: List<Message>) => {
+    // this.messages.subscribe((messages: List<Message>) => {
+    //   console.log(2);
+    //   console.log(messages);
+    //   console.log(this.messages);
+    // });
+  }
+
+  getAllMessage(): Observable<List<Message>> {console.log(10);
+    const obsMessages: Observable<List<Message>> = this.messageRepositoryService.getAllMessage();
+    obsMessages.subscribe((messages: List<Message>) => {
           this._messages.next(List(messages));
         },
         (err) => console.log('Error retrieving Messages')
       );
+
+    return obsMessages;
   }
 
-  getAllMessage(): List<Message> {
-    return this._messages.getValue();
+  getMessageById(messageId: number): Observable<any> {
+    const obsMessage: Observable<Message> = this.messageRepositoryService.getMessageById(messageId);
+
+    return obsMessage;
   }
 
-  getMessageById(messageId: number): Message {
-    return this._messages.getValue().find((message) => message.id === messageId);
-  }
-
-  addMessage(newMessage: Message): Observable<any> {
+  addMessage(newMessage: Message): Observable<Message> {
     if (!newMessage.title) {
-      return;
+      return Observable.empty<Message>().share();
     }
 
-    const obs: Observable<any> = this.messageRepositoryService.addMessage(newMessage);
+    const obsMessage: Observable<Message> = this.messageRepositoryService.addMessage(newMessage);
 
-    obs.subscribe(() => {
-        this._messages.next(this._messages.getValue().push(newMessage));
+    obsMessage.subscribe((message) => {
+        this._messages.next(this._messages.getValue().push(message));
       },
       () => console.log('error')
     );
 
-    return obs;
+    return obsMessage;
   }
 
   deleteMessageById(messageId: number): Observable<any> {
@@ -50,7 +63,10 @@ export class BlogService {
     obs.subscribe((res) => {
         const messages: List<Message> = this._messages.getValue();
         const index = messages.findIndex((message) => message.id === messageId);
-        this._messages.next(messages.delete(index));
+        // if (index > 0) {
+        //   this._messages.next(messages.remove(index));
+        // }
+        this._messages.next(List<Message>());
       },
       () => console.log('error')
     );
@@ -58,22 +74,22 @@ export class BlogService {
     return obs;
   }
 
-  updateMessageById(messageUpdated: Message): Observable<any> {
+  updateMessageById(messageUpdated: Message): Observable<Message> {
     if (!messageUpdated.id && !messageUpdated.title) {
       return;
     }
 
-    const obs: Observable<any> = this.messageRepositoryService.updateMessage(messageUpdated);
+    const obsMessage: Observable<Message> = this.messageRepositoryService.updateMessage(messageUpdated);
 
-    obs.subscribe((res) => {
+    obsMessage.subscribe((message) => {
         const messages: List<Message> = this._messages.getValue();
-        const index = messages.findIndex((message) => message.id === messageUpdated.id);
-        messages[index] = messageUpdated;
+        const index = messages.findIndex((m) => m.id === messageUpdated.id);
+        messages[index] = message;
         this._messages.next(messages);
       },
       () => console.log('error')
     );
 
-    return obs;
+    return obsMessage;
   }
 }

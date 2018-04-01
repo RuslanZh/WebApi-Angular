@@ -7,13 +7,12 @@ import { List } from 'immutable';
   selector: 'myblog-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css'],
-  providers: [ BlogService ]
+  providers: [ ]
 })
 export class MessagesComponent implements OnInit {
   @Input() messages: List<Message>;
 
   constructor(private blogService: BlogService) {
-    this.messages = this.blogService.getAllMessage();
   }
 
   ngOnInit() {

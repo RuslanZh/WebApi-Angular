@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Message } from '../models/message';
+import { BlogService } from '../blog.service';
+import { List } from 'immutable';
 
 @Component({
   selector: 'myblog-blog',
@@ -7,19 +9,18 @@ import { Message } from '../models/message';
   styleUrls: ['./blog.component.css']
 })
 export class BlogComponent implements OnInit {
-    public messages: object[] = [
-      {
-        text: 'Message one',
-        author: 'Ruslan'
-      },
-      {
-        text: 'Message two',
-        author: 'Ruslan'
-      }
-    ];
+  public messages: List<Message> = List<Message>();
 
-  constructor() {
-    // private http: HttpClient
+  constructor(private blogService: BlogService) {
+    this.blogService.messages.subscribe((messages) => {
+      // console.log(1);
+      // console.log(messages);
+      // console.log(this.blogService.messages);
+      console.log(messages);
+      this.messages = messages;
+    });
+
+    this.blogService.getAllMessage();
   }
 
   ngOnInit() {
