@@ -1,6 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import { Message } from '../models/message';
 import {BlogService} from '../blog.service';
+import { componentDestroyed } from 'ng2-rx-componentdestroyed';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'myblog-message',
@@ -8,7 +10,7 @@ import {BlogService} from '../blog.service';
   styleUrls: ['./message.component.css'],
   providers: [ ]
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy {
   @Input() message: Message;
   // @Output() removeMessageHandler = new EventEmitter<Message>();
 
@@ -17,12 +19,15 @@ export class MessageComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
+  }
   // public removeMessage(message: Message) {
   //
   //   this.removeMessageHandler.emit(message);
   // }
 
   public removeMessage(message: Message) {
-    this.blogService.deleteMessageById(message.id);
+    this.blogService.deleteMessageById(message.id)
+      .takeUntil(componentDestroyed(this));
   }
 }
