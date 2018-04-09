@@ -60,13 +60,16 @@ export class BlogService {
   deleteMessageById(messageId: number): Observable<any> {
     const obs: Observable<any> = this.messageRepositoryService.deleteMessageById(messageId);
 
-    obs.subscribe((res) => {
+    obs.subscribe((status) => {
+        if (!status) {
+          return;
+        }
         const messages: List<Message> = this._messages.getValue();
         const index = messages.findIndex((message) => message.id === messageId);
-        // if (index > 0) {
-        //   this._messages.next(messages.remove(index));
-        // }
-        this._messages.next(List<Message>());
+        if (index < 0) {
+          return;
+        }
+        this._messages.next(messages.remove(index));
       },
       () => console.log('error')
     );

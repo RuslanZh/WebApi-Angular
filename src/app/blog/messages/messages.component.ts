@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Message } from '../models/message';
-import { BlogService } from '../blog.service';
 import { List } from 'immutable';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'myblog-messages',
@@ -12,13 +12,9 @@ import { List } from 'immutable';
 export class MessagesComponent implements OnInit {
   @Input() messages: List<Message>;
 
-  constructor(private blogService: BlogService) {
+  constructor() {
   }
 
   ngOnInit() {
-  }
-
-  removeMessage(message: Message) {
-    this.blogService.deleteMessageById(message.id);
   }
 }

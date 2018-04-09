@@ -13,9 +13,6 @@ export class BlogComponent implements OnInit {
 
   constructor(private blogService: BlogService) {
     this.blogService.messages.subscribe((messages) => {
-      // console.log(1);
-      // console.log(messages);
-      // console.log(this.blogService.messages);
       console.log(messages);
       this.messages = messages;
     });

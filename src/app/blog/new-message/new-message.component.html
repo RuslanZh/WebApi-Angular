@@ -5,6 +5,10 @@
   <div class="card-block">
     <form [formGroup]="blogFormNewMessage" novalidate>
         <div class="form-group">
+          <label class="col-md-4">Title</label>
+          <input type="text" class="form-control" formControlName="title" [(ngModel)]="message.title"/>
+        </div>
+        <div class="form-group">
           <label class="col-md-4">Author</label>
           <input type="text" class="form-control" formControlName="author" [(ngModel)]="message.author"/>
         </div>

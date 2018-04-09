@@ -1,10 +1,9 @@
 <h1>{{messages.count()}} messages</h1>
 <div *ngIf="messages.count() > 0">
   <myblog-message
-    (removeMessageHandler)="removeMessage(message)"
     *ngFor="let message of messages"
     [message]="message"
   >
   </myblog-message>
 </div>
-
+<!--(removeMessageHandler)="removeMessage(message)"-->

@@ -6,18 +6,23 @@ import {BlogService} from '../blog.service';
   selector: 'myblog-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.css'],
-  providers: [ BlogService ]
+  providers: [ ]
 })
 export class MessageComponent implements OnInit {
   @Input() message: Message;
-  @Output() removeMessageHandler = new EventEmitter<Message>();
+  // @Output() removeMessageHandler = new EventEmitter<Message>();
 
-  constructor() { }
+  constructor(private blogService: BlogService) { }
 
   ngOnInit() {
   }
 
+  // public removeMessage(message: Message) {
+  //
+  //   this.removeMessageHandler.emit(message);
+  // }
+
   public removeMessage(message: Message) {
-    this.removeMessageHandler.emit(message);
+    this.blogService.deleteMessageById(message.id);
   }
 }

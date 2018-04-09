@@ -75,13 +75,11 @@ export class MessageRepositoryService {
       .share();
   }
 
-  deleteMessageById(messageId: number): Observable<void> {
+  deleteMessageById(messageId: number): Observable<boolean> {
     return this.http.delete(`${this.apiPath}/messages/${messageId}`)
       .map((res: Response) => {
         const response = res.json();
-        if (!response.status) {
-          return null;
-        }
+        return !!response.status;
       })
       .share();
   }

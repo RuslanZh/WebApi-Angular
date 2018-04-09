@@ -50,7 +50,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-const messages = [
+let messages = [
   {
     id: 1,
     title: 'Title 1',
@@ -76,6 +76,7 @@ const messages = [
     author: 'Ruslan'
   }
 ];
+messages = messages.sort((a, b) => a - b);
 
 const router = express.Router();
 
@@ -106,7 +107,7 @@ router.post('/', function(req, res) {
   if(req.body.title && req.body.text && req.body.author){
     const lastMessage = messages.slice(-1).pop();
     newMessage = {
-      id: lastMessage.id++,
+      id: lastMessage.id + 1,
       title: req.body.title,
       text: req.body.text,
       author: req.body.author
@@ -148,7 +149,6 @@ router.delete('/:id', function(req, res) {
     messages.splice(messageIndex, 1);
     status = true;
   }
-
   res.json({ status: status });
 });
 
