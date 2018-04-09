@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routerConfig';
@@ -15,6 +16,7 @@ import { AboutMeComponent } from './about-me/about-me.component';
   ],
   imports: [
     BrowserModule,
+    StoreModule.forRoot({ /* an empty object here for this time */}),
     RouterModule.forRoot(appRoutes),
     BlogModule
     // LazyModule

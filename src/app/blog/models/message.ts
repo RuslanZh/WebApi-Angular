@@ -4,7 +4,7 @@ export class Message {
     title: string;
     text: string;
 
-    constructor( message: Object = {} ) {
+    constructor(message: Object = {}) {
       Object.assign(this, message);
     }
  }
